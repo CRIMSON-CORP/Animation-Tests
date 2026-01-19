@@ -1,0 +1,124 @@
+<div id="screen1">
+  <button id="myButton" class="btn">Click me</button>
+</div>
+
+<div id="screen2" style="display: none">
+  <div id="targetBox" class="selected">
+    <div class="item">Item 1</div>
+    <div class="item">Item 2</div>
+    <div class="item">Item 3</div>
+    <div class="item highlight">Selected Item</div>
+    <div class="item">Item 5</div>
+  </div>
+</div>
+
+<style>
+  body {
+    font-family: sans-serif;
+  }
+
+  .btn {
+    background: tomato;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: none;
+    font-size: 16px;
+  }
+
+  .selected {
+    background: royalblue;
+    color: white;
+    padding: 20px 60px;
+    border-radius: 6px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .item {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .item.show {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .highlight {
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  function snapshot(el) {
+    const rect = el.getBoundingClientRect();
+    const style = window.getComputedStyle(el);
+    return { rect, style };
+  }
+
+  function cloneBackground(el, snapshot) {
+    const clone = document.createElement("div");
+    const s = snapshot.style;
+
+    clone.style.position = "fixed";
+    clone.style.left = snapshot.rect.left + "px";
+    clone.style.top = snapshot.rect.top + "px";
+    clone.style.width = snapshot.rect.width + "px";
+    clone.style.height = snapshot.rect.height + "px";
+    clone.style.background = s.background;
+    clone.style.borderRadius = s.borderRadius;
+    clone.style.boxShadow = s.boxShadow;
+    clone.style.zIndex = "9999";
+    clone.style.transition = "all 0.6s cubic-bezier(.2,.8,.2,1)";
+
+    document.body.appendChild(clone);
+    return clone;
+  }
+
+  function animateBetween(fromEl, toEl) {
+    const before = snapshot(fromEl);
+
+    // fade out text of button
+    fromEl.style.transition = "opacity 0.3s";
+    fromEl.style.opacity = "0";
+
+    // swap screens
+    document.getElementById("screen1").style.display = "none";
+    document.getElementById("screen2").style.display = "block";
+
+    const after = snapshot(toEl);
+
+    const clone = cloneBackground(fromEl, before);
+    clone.getBoundingClientRect(); // force reflow
+
+    // Animate background morph
+    clone.style.left = after.rect.left + "px";
+    clone.style.top = after.rect.top + "px";
+    clone.style.width = after.rect.width + "px";
+    clone.style.height = after.rect.height + "px";
+    clone.style.borderRadius = after.style.borderRadius;
+    clone.style.background = after.style.background;
+    clone.style.boxShadow = after.style.boxShadow;
+
+    clone.addEventListener("transitionend", () => {
+      clone.remove();
+
+      // Fade in items with stagger
+      const items = toEl.querySelectorAll(".item");
+      items.forEach((item, i) => {
+        setTimeout(() => {
+          item.classList.add("show");
+        }, i * 120); // stagger delay
+      });
+    });
+  }
+
+  document.getElementById("myButton").addEventListener("click", () => {
+    animateBetween(
+      document.getElementById("myButton"),
+      document.getElementById("targetBox")
+    );
+  });
+</script>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      *,
+      body {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: blueviolet;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
+
+      .container {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fill, 200px);
+        max-width: 630px;
+        margin: 0 auto;
+        padding: 40px 0px;
+      }
+
+      button {
+        grid-column: 1 / span3;
+        margin: 0 auto;
+        padding: 12px 64px;
+        border-radius: 10px;
+        border: none;
+        background-color: chocolate;
+        color: white;
+        font-family: inherit;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.16);
+        transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+        cursor: pointer;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+      }
+
+      .container div {
+        background-color: white;
+        border-radius: 10px;
+        aspect-ratio: 1/1;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.16);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+      <button>Add</button>
+    </div>
+
+    <!-- <script>
+      const container = document.querySelector(".container");
+      const button = document.querySelector("button");
+
+      button.addEventListener("click", () => {
+        flip(() => {
+          const newBox = document.createElement("div");
+          container.prepend(newBox);
+          newBox.style.transform = "scale(0.5)";
+          newBox.style.opacity = "0";
+          newBox.animate(
+            {
+              transform: ["scale(0.5)", "scale(1)"],
+              opacity: ["0", "1"],
+            },
+            {
+              fill: "forwards",
+              duration: 700,
+              easing: "cubic-bezier(.22, 1, .36, 1)",
+              delay: 200,
+            }
+          );
+        });
+      });
+
+      const flip = async (action) => {
+        const boxes = [...document.querySelectorAll(".container > div")];
+
+        const first = boxes.map((box) => box.getBoundingClientRect());
+        const buttonFirst = button.getBoundingClientRect();
+
+        await action();
+
+        const last = boxes.map((box) => box.getBoundingClientRect());
+        const buttonLast = button.getBoundingClientRect();
+
+        requestAnimationFrame(() => {
+          boxes.forEach((box, index) => {
+            const invertX = first[index].left - last[index].left;
+            const invertY = first[index].top - last[index].top;
+            box.animate(
+              {
+                transform: [
+                  `translate(${invertX}px,${invertY}px)`,
+                  `translate(0px,0px)`,
+                ],
+              },
+              {
+                fill: "forwards",
+                duration: 700,
+                easing: "cubic-bezier(.22, 1, .36, 1)",
+              }
+            );
+          });
+        });
+        button.animate(
+          {
+            transform: [
+              `translateY(${buttonFirst.top - buttonLast.top}px)`,
+              "translateY(0)",
+            ],
+          },
+          {
+            fill: "forwards",
+            duration: 700,
+            easing: "cubic-bezier(.22, 1, .36, 1)",
+          }
+        ).onfinish = function () {
+          this.cancel();
+        };
+      };
+
+      window.addEventListener("click", (e) => {
+        if (e.target.tagName === "DIV" && container.contains(e.target)) {
+          const box = e.target;
+          flip(() => {
+            return new Promise((res) => {
+              box.animate(
+                {
+                  transform: ["scale(1)", "scale(0.5)"],
+                  opacity: ["1", "0"],
+                },
+                {
+                  fill: "forwards",
+                  duration: 700,
+                  easing: "cubic-bezier(.22, 1, .36, 1)",
+                }
+              ).onfinish = function () {
+                box.remove();
+                res();
+              };
+            });
+          });
+        }
+      });
+    </script> -->
+    <script>
+      const container = document.querySelector(".container");
+      const button = document.querySelector("button");
+      function snapshot(container) {
+        const rects = {};
+        container.querySelectorAll("div").forEach((el) => {
+          el.dataset.id = el.dataset.id || "id-" + Math.random();
+          rects[el.dataset.id] = {
+            el,
+            rect: el.getBoundingClientRect(),
+          };
+        });
+        return rects;
+      }
+
+      function flip(container, action) {
+        const first = snapshot(container);
+
+        action(); // <-- mutate DOM (add/remove/reorder)
+
+        const last = snapshot(container);
+
+        requestAnimationFrame(() => runFlip(first, last));
+      }
+
+      button.addEventListener("click", () => {
+        flip(container, () => {
+          const newBox = document.createElement("div");
+          const newBox2 = document.createElement("div");
+          container.prepend(newBox, newBox2);
+        });
+      });
+
+      window.addEventListener("click", (e) => {
+        if (e.target.tagName === "DIV" && container.contains(e.target)) {
+          const box = e.target;
+          flip(container, () => {
+            box.remove();
+          });
+        }
+      });
+
+      function runFlip(first, last, opts = {}) {
+        const DURATION = opts.duration ?? 500;
+        const E_EXIT = opts.easingExit ?? "cubic-bezier(.1,1,.43,1)";
+        const E_MOVE = opts.easingMove ?? "cubic-bezier(.1,1,.43,1)";
+        const E_ENTER = opts.easingEnter ?? "cubic-bezier(.1,1,.43,1)";
+
+        // Diff
+        const moved = [];
+        const entered = [];
+        const exited = [];
+
+        for (const id in last) {
+          if (first[id]) moved.push({ prev: first[id], next: last[id] });
+          else entered.push(last[id]);
+        }
+        for (const id in first) {
+          if (!last[id]) exited.push(first[id]);
+        }
+
+        // --- Exits (immediately) ---
+        exited.forEach((prev) => {
+          const clone = makeAbsoluteClone(prev.el, prev.rect);
+          clone.animate(
+            [
+              { transform: "scale(1)", opacity: 1 },
+              { transform: "scale(0.8)", opacity: 0 },
+            ],
+            { duration: DURATION, easing: E_EXIT, fill: "forwards" }
+          ).onfinish = () => clone.remove();
+        });
+
+        // Moves wait for exits (if any)
+        const moveDelay = exited.length ? DURATION * 0.5 : 0;
+
+        // --- Moves ---
+        moved.forEach(({ prev, next }) => {
+          const dx = prev.rect.left - next.rect.left;
+          const dy = prev.rect.top - next.rect.top;
+          const sx = prev.rect.width / next.rect.width;
+          const sy = prev.rect.height / next.rect.height;
+
+          next.el.animate(
+            [
+              { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})` },
+              { transform: "none" },
+            ],
+            {
+              duration: DURATION,
+              easing: E_MOVE,
+              delay: moveDelay,
+              fill: "both",
+            }
+          );
+        });
+
+        // Enters wait for exits + moves (if any)
+        const enterDelay =
+          (exited.length ? DURATION * 0.5 : 0) +
+          (moved.length ? DURATION * 0.5 : 0);
+
+        // --- Enters ---
+        entered.forEach((next) => {
+          next.el.animate(
+            [
+              { transform: "scale(0.8)", opacity: 0 },
+              { transform: "scale(1)", opacity: 1 },
+            ],
+            {
+              duration: DURATION,
+              easing: E_ENTER,
+              delay: enterDelay,
+              fill: "both",
+            }
+          );
+        });
+        // Helpers
+        function makeAbsoluteClone(el, rect) {
+          const clone = el.cloneNode(true);
+          document.body.appendChild(clone);
+          applyComputedStylesDeep(el, clone);
+
+          Object.assign(clone.style, {
+            position: "fixed",
+            margin: "0",
+            top: rect.top + "px",
+            left: rect.left + "px",
+            width: rect.width + "px",
+            height: rect.height + "px",
+            zIndex: 9999,
+            pointerEvents: "none",
+            transformOrigin: "top left",
+            backgroundColor: "white",
+            borderRadius: "10px",
+            transformOrigin: "center center",
+          });
+
+          return clone;
+        }
+
+        function applyComputedStylesDeep(source, target) {
+          const computed = getComputedStyle(source);
+          // Use setProperty so hyphenated props work; skip props that fight our WAAPI
+          const SKIP = new Set([
+            "transform",
+            "transition",
+            "animation",
+            "animation-name",
+          ]);
+          for (const prop of computed) {
+            if (SKIP.has(prop)) continue;
+            target.style.setProperty(
+              prop,
+              computed.getPropertyValue(prop),
+              computed.getPropertyPriority(prop)
+            );
+          }
+          const sKids = Array.from(source.children);
+          const tKids = Array.from(target.children);
+          for (let i = 0; i < sKids.length; i++) {
+            if (tKids[i]) applyComputedStylesDeep(sKids[i], tKids[i]);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

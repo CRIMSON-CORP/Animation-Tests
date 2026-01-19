@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FLIP Example</title>
+    <style>
+      body {
+        padding: 3rem;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .wrapper {
+        width: 128px;
+        height: 64px;
+        background-color: blueviolet;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+
+      .dot {
+        box-sizing: border-box;
+        background-color: burlywood;
+        height: 48px;
+        aspect-ratio: 1/1;
+        border-radius: 999px;
+      }
+
+      .wrapper.active {
+        justify-content: flex-end;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper">
+        <div class="dot"></div>
+      </div>
+      <div class="wrapper"></div>
+    </div>
+    <script>
+      const wrappers = document.querySelectorAll(".wrapper");
+      const dot = document.querySelector(".dot");
+
+      wrappers.forEach((wrapper) => {
+        wrapper.addEventListener("click", () => {
+          // 1. First
+          const first = dot.getBoundingClientRect();
+
+          const otherWrapper = [...wrappers].filter(
+            (_wrapper) => _wrapper === wrapper
+          )[0];
+
+          const clone = dot.cloneNode();
+
+          otherWrapper.appendChild(dot);
+          dot.style.visibility = "hidden";
+
+          const dotComputedStyle = window.getComputedStyle(dot);
+          clone.style.position = "absolute";
+          clone.style.width = first.width + "px";
+          clone.style.height = first.height + "px";
+          clone.style.top = 0 + "px";
+          clone.style.left = 0 + "px";
+          clone.style.transform = `translate(${first.x}px, ${first.y}px)`;
+          clone.style.backgroundColor = dotComputedStyle.backgroundColor;
+          clone.style.borderRadius = dotComputedStyle.borderRadius + "px";
+
+          document.body.appendChild(clone);
+
+          // 2. Last
+          const last = dot.getBoundingClientRect();
+
+          // 3. Invert
+          const invertX = first.left - last.left;
+          const invertY = first.top - last.top;
+
+          // 4. Play (ensure layout flush first)
+          requestAnimationFrame(() => {
+            const animation = clone.animate(
+              [
+                { transform: `translate(${first.x}px, ${first.y}px)` },
+                { transform: `translate(${last.x}px, ${last.y}px)` },
+              ],
+              {
+                duration: 300,
+                easing: "ease-out",
+                fill: "both",
+              }
+            );
+            animation.onfinish = () => {
+              animation.commitStyles();
+              dot.style.visibility = "";
+              clone.remove();
+            };
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      :root {
+        --spring-easing: linear(
+          0,
+          0.002,
+          0.007,
+          0.015,
+          0.027 2.1%,
+          0.061,
+          0.11 4.6%,
+          0.159,
+          0.219 6.9%,
+          0.48 11.9%,
+          0.596,
+          0.704 16.6%,
+          0.751,
+          0.794,
+          0.833,
+          0.869,
+          0.901,
+          0.929,
+          0.954,
+          0.976,
+          0.994,
+          1.01 29.1%,
+          1.019,
+          1.026 31%,
+          1.033,
+          1.038,
+          1.041,
+          1.044,
+          1.046 36.6% 37.9%,
+          1.045 40%,
+          1.041 42.5%,
+          1.02 51.4%,
+          1.011 55.6%,
+          1.005,
+          1.001 63.7%,
+          0.999 68.5%,
+          0.998 74.1%,
+          1
+        );
+        --spring-duration: 1.333s;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: rgb(235, 235, 235);
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        perspective: 300px;
+      }
+
+      .box {
+        background-color: white;
+        border-radius: 10px;
+        padding: 16px;
+        position: relative;
+
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transform-style: preserve-3d;
+        transition: transform var(--spring-easing) var(--spring-duration);
+        will-change: transform;
+
+        &:has(button:active) {
+          transition: transform ease-out 300ms;
+          transform: scale(0.9) rotateX(var(--x)) rotateY(var(--y));
+        }
+        &:hover {
+          transition: transform ease-out 300ms;
+          transform: rotateX(var(--x)) rotateY(var(--y));
+        }
+
+        span {
+          display: block;
+          transition: all var(--spring-easing) var(--spring-duration);
+        }
+      }
+
+      button {
+        border: none;
+        background-color: transparent;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        width: 24px;
+        height: auto;
+        padding: 0;
+        cursor: pointer;
+
+        span {
+          height: 2px;
+          width: 100%;
+          border-radius: 5px;
+          background-color: rgb(0, 0, 0);
+          opacity: 0.1;
+
+          &:last-child {
+            width: 50%;
+          }
+        }
+
+        &.center {
+          align-items: center;
+        }
+        &.right {
+          align-items: flex-end;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <button class="align left">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="align center">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="align right">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <script>
+      const box = document.querySelector(".box");
+      const alignButtons = Array.from(box.children);
+
+      const firstAlgn = alignButtons[0];
+      const boxRect = box.getBoundingClientRect();
+
+      const indicators = Array(3)
+        .fill("")
+        .map((param, index) => {
+          const span = document.createElement("span");
+
+          const firstAlignIndexChild = firstAlgn.children[index];
+          const { backgroundColor, borderRadius } =
+            window.getComputedStyle(firstAlignIndexChild);
+          const firstAlignIndexChildRext =
+            firstAlignIndexChild.getBoundingClientRect();
+
+          span.classList.add("indicator");
+          span.style.position = "absolute";
+          span.style.backgroundColor = backgroundColor;
+          span.style.borderRadius = borderRadius;
+          span.style.top = firstAlignIndexChild.offsetTop + "px";
+          span.style.left = firstAlignIndexChild.offsetLeft + "px";
+          span.style.width = firstAlignIndexChild.offsetWidth + "px";
+          span.style.height = firstAlignIndexChild.offsetHeight + "px";
+          box.append(span);
+          return span;
+        });
+
+      alignButtons.forEach((button) => {
+        const children = button.children;
+        button.onclick = () => {
+          indicators.forEach((indicator, index) => {
+            const buttonChildIndex = children[index];
+
+            setTimeout(() => {
+              indicator.style.transform = `translateX(${
+                buttonChildIndex.offsetLeft - 16
+              }px)`;
+            }, index * 50);
+          });
+        };
+      });
+
+      box.addEventListener("mousemove", (e) => {
+        const rect = box.getBoundingClientRect();
+
+        const x = e.clientX - rect.left; // left → right
+        const y = e.clientY - rect.top; // top → bottom
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateY = ((x - centerX) / centerX) * 24; // tilt left/right
+        const rotateX = -((y - centerY) / centerY) * 24; // tilt up/down
+
+        box.style.setProperty("--x", `${rotateX}deg`);
+        box.style.setProperty("--y", `${rotateY}deg`);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --body-background: rgb(223, 223, 223);
+      }
+
+      svg {
+        display: block;
+      }
+
+      body {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background-color: var(--body-background);
+      }
+
+      .wrapper {
+        border-radius: 99px;
+        padding: 4px;
+        position: relative;
+
+        .background {
+          content: "";
+          inset: 0;
+          position: absolute;
+          mix-blend-mode: difference;
+          background-color: var(--body-background);
+          border-radius: inherit;
+        }
+
+        .content {
+          position: relative;
+          display: grid;
+        }
+
+        button {
+          padding: 12px;
+          background-color: transparent;
+          border: none;
+          border-radius: 99px;
+          cursor: pointer;
+          position: relative;
+
+          svg {
+            transition: transform 400ms ease-out;
+            mix-blend-mode: difference;
+            fill: var(--body-background);
+          }
+
+          &:hover {
+            svg {
+              transform: scale(1.05);
+            }
+          }
+          &:active {
+            svg {
+              transform: scale(0.95);
+            }
+          }
+
+          span {
+            content: attr(data-title);
+            position: absolute;
+            color: var(--body-background);
+            top: 50%;
+            transform: translateY(-50%);
+            left: calc(100% + 12px);
+            font-size: 8px;
+            z-index: 1;
+            padding: 4px 6px;
+          }
+        }
+
+        .indicator {
+          position: absolute;
+          width: 100%;
+          aspect-ratio: 1/1;
+          background-color: var(--body-background);
+          mix-blend-mode: difference;
+          border-radius: 99px;
+          pointer-events: none;
+        }
+
+        .title-indicator {
+          position: absolute;
+          border-radius: 99px;
+          background-color: var(--body-background);
+          mix-blend-mode: difference;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="background"></div>
+      <div class="content">
+        <button data-title="Pointer">
+          <svg
+            id="arrow-point"
+            hidden
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M30 14.1975C29.9969 14.6201 29.8581 15.0304 29.604 15.3681C29.3499 15.7057 28.9939 15.9527 28.5887 16.0725L19.0187 19.0175L16.0737 28.5875C15.9537 28.9926 15.7067 29.3485 15.3691 29.6025C15.0315 29.8566 14.6212 29.9955 14.1987 29.9988H14.1612C13.7469 30.0026 13.3419 29.8758 13.0037 29.6364C12.6656 29.397 12.4114 29.0571 12.2775 28.665L4.12497 6.67625C4.12233 6.66977 4.12024 6.66308 4.11872 6.65625C3.99685 6.30229 3.97676 5.92123 4.06075 5.55642C4.14474 5.19162 4.32943 4.8577 4.59381 4.59267C4.8582 4.32764 5.19165 4.14213 5.55625 4.05724C5.92085 3.97235 6.30196 3.9915 6.65622 4.1125L6.67622 4.11875L28.6662 12.2762C29.0644 12.4124 29.4086 12.6722 29.6486 13.0179C29.8885 13.3635 30.0117 13.7769 30 14.1975Z"
+            />
+          </svg>
+          <span>Pointer</span>
+        </button>
+        <button data-title="Pen">
+          <svg
+            id="pencil"
+            hidden
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M28.4138 9.17125L22.8288 3.585C22.643 3.39924 22.4225 3.25188 22.1799 3.15134C21.9372 3.0508 21.6771 2.99905 21.4144 2.99905C21.1517 2.99905 20.8916 3.0508 20.6489 3.15134C20.4062 3.25188 20.1857 3.39924 20 3.585L4.58626 19C4.39973 19.185 4.25185 19.4053 4.15121 19.648C4.05057 19.8907 3.99917 20.151 4.00001 20.4138V26C4.00001 26.5304 4.21072 27.0391 4.5858 27.4142C4.96087 27.7893 5.46958 28 6.00001 28H11.5863C11.849 28.0008 12.1093 27.9494 12.352 27.8488C12.5947 27.7482 12.815 27.6003 13 27.4138L28.4138 12C28.5995 11.8143 28.7469 11.5938 28.8474 11.3511C28.948 11.1084 28.9997 10.8483 28.9997 10.5856C28.9997 10.3229 28.948 10.0628 28.8474 9.82015C28.7469 9.57747 28.5995 9.35698 28.4138 9.17125ZM24 13.585L18.4138 8L21.4138 5L27 10.585L24 13.585Z"
+            />
+          </svg>
+          <span>Pen</span>
+        </button>
+        <button data-title="Fill">
+          <svg
+            hidden
+            id="paint-bucket"
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M31.9999 25.5C31.9999 26.4283 31.6312 27.3185 30.9748 27.9749C30.3184 28.6312 29.4282 29 28.4999 29C27.5717 29 26.6814 28.6312 26.0251 27.9749C25.3687 27.3185 24.9999 26.4283 24.9999 25.5C24.9999 22.5537 27.7574 20.3137 27.8749 20.2187C28.0523 20.0767 28.2727 19.9994 28.4999 19.9994C28.7272 19.9994 28.9476 20.0767 29.1249 20.2187C29.2424 20.3137 31.9999 22.5537 31.9999 25.5ZM16.5612 15.5612C16.7705 15.3513 16.9128 15.084 16.9703 14.7931C17.0277 14.5023 16.9977 14.201 16.884 13.9272C16.7703 13.6534 16.5781 13.4195 16.3315 13.2549C16.085 13.0903 15.7951 13.0024 15.4987 13.0024C15.2022 13.0024 14.9124 13.0903 14.6659 13.2549C14.4193 13.4195 14.2271 13.6534 14.1134 13.9272C13.9997 14.201 13.9697 14.5023 14.0271 14.7931C14.0846 15.084 14.2269 15.3513 14.4362 15.5612C14.5756 15.7011 14.7411 15.812 14.9235 15.8877C15.1058 15.9635 15.3013 16.0024 15.4987 16.0024C15.6961 16.0024 15.8916 15.9635 16.0739 15.8877C16.2563 15.812 16.4218 15.7011 16.5612 15.5612ZM28.7074 14.7287L15.2712 1.29249C15.0837 1.1051 14.8294 0.999832 14.5643 0.999832C14.2992 0.999832 14.045 1.1051 13.8574 1.29249L8.7812 6.37499L13.8349 11.4275C14.5743 11.0274 15.433 10.9067 16.254 11.0876C17.075 11.2686 17.8035 11.7389 18.3062 12.4128C18.8089 13.0866 19.0522 13.9189 18.9917 14.7574C18.9313 15.5959 18.571 16.3847 17.9768 16.9794C17.3826 17.5741 16.5942 17.9351 15.7557 17.9963C14.9172 18.0576 14.0847 17.8149 13.4104 17.3128C12.7362 16.8107 12.2651 16.0827 12.0835 15.2619C11.9018 14.441 12.0217 13.5822 12.4212 12.8425L7.36745 7.78249L1.87495 13.2712C1.31238 13.8338 0.996338 14.5969 0.996338 15.3925C0.996338 16.1881 1.31238 16.9511 1.87495 17.5137L12.4862 28.125C13.0488 28.6876 13.8118 29.0036 14.6074 29.0036C15.4031 29.0036 16.1661 28.6876 16.7287 28.125L28.7074 16.1462C28.8008 16.0533 28.8749 15.9429 28.9254 15.8213C28.976 15.6996 29.002 15.5692 29.002 15.4375C29.002 15.3058 28.976 15.1754 28.9254 15.0537C28.8749 14.9321 28.8008 14.8217 28.7074 14.7287ZM5.70745 3.29249C5.51981 3.10485 5.26531 2.99944 4.99995 2.99944C4.73458 2.99944 4.48009 3.10485 4.29245 3.29249C4.10481 3.48013 3.99939 3.73463 3.99939 3.99999C3.99939 4.26536 4.10481 4.51985 4.29245 4.70749L7.36745 7.78249L8.7812 6.37499L5.70745 3.29249Z"
+            />
+          </svg>
+          <span>Fill</span>
+        </button>
+        <button data-title="Erase">
+          <svg
+            hidden
+            id="eraser"
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M28.1249 10.05L22.9499 4.87501C22.3873 4.31244 21.6243 3.9964 20.8287 3.9964C20.0331 3.9964 19.2701 4.31244 18.7074 4.87501L3.87495 19.7075C3.31238 20.2701 2.99634 21.0331 2.99634 21.8288C2.99634 22.6244 3.31238 23.3874 3.87495 23.95L7.63245 27.7075C7.72568 27.8006 7.83641 27.8744 7.95825 27.9246C8.0801 27.9748 8.21067 28.0004 8.34245 28H26.9999C27.2652 28 27.5195 27.8947 27.7071 27.7071C27.8946 27.5196 27.9999 27.2652 27.9999 27C27.9999 26.7348 27.8946 26.4804 27.7071 26.2929C27.5195 26.1054 27.2652 26 26.9999 26H16.4124L28.1249 14.2925C28.6875 13.7299 29.0036 12.9669 29.0036 12.1713C29.0036 11.3756 28.6875 10.6126 28.1249 10.05ZM26.7087 12.875L19.9999 19.5863L13.4137 13L20.1249 6.29251C20.2178 6.19953 20.3281 6.12577 20.4495 6.07545C20.5709 6.02512 20.701 5.99922 20.8324 5.99922C20.9639 5.99922 21.094 6.02512 21.2154 6.07545C21.3368 6.12577 21.4471 6.19953 21.5399 6.29251L26.7124 11.465C26.8998 11.6525 27.0051 11.9068 27.0051 12.1719C27.0051 12.437 26.8998 12.6912 26.7124 12.8788L26.7087 12.875Z"
+            />
+          </svg>
+          <span>Erase</span>
+        </button>
+        <div class="indicator"></div>
+        <div class="title-indicator"></div>
+      </div>
+    </div>
+
+    <script>
+      const wrapper = document.querySelector(".wrapper");
+      const content = document.querySelector(".content");
+      const buttons = document.querySelectorAll("button");
+      const indicator = document.querySelector(".indicator");
+
+      const dampedEasing = `linear(
+    0, 0.006, 0.022, 0.05 4.8%, 0.09 6.8%, 0.177 10.2%, 0.481 21.1%, 0.571, 0.649,
+    0.712, 0.768, 0.816 38.8%, 0.857 42.6%, 0.897 47.1%, 0.93 52%, 0.955 57.4%,
+    0.973 63.3%, 0.986 69.9%, 0.994 77.6%, 0.999 87%, 1.001
+  )`;
+
+      const indicatorEasing = "cubic-bezier(.47,.2,.02,1)";
+      const indicatorDuration = 1200;
+      const titleIndicatorOffset = 0.4;
+
+      const wrapperDuration = 1200;
+      const wrapperEasing = "cubic-bezier(1,0,0,1)";
+
+      const titleIndicator = document.querySelector(".title-indicator");
+
+      let currentButton = buttons[0];
+
+      let isAniamting = false;
+
+      const currentButtonRect = currentButton.getBoundingClientRect();
+      const currentButtonSpanRect =
+        currentButton.lastElementChild.getBoundingClientRect();
+      const contentRect = content.getBoundingClientRect();
+
+      titleIndicator.style.top =
+        currentButtonSpanRect.top - contentRect.top + "px";
+      titleIndicator.style.left =
+        currentButtonSpanRect.left - contentRect.left + "px";
+      titleIndicator.style.width = currentButtonSpanRect.width + "px";
+      titleIndicator.style.height = currentButtonSpanRect.height + "px";
+
+      buttons.forEach((button) => {
+        button.onclick = () => {
+          if (button === currentButton) return;
+          if (isAniamting) return;
+
+          isAniamting = true;
+
+          const comparation = currentButton.compareDocumentPosition(button);
+
+          const wrapperRect = wrapper.getBoundingClientRect();
+          const containerRect = content.getBoundingClientRect();
+          const buttonRect = button.getBoundingClientRect();
+          const currentButtonRect = currentButton.getBoundingClientRect();
+          const indicatorRect = indicator.getBoundingClientRect();
+          const buttonSpanRect =
+            button.lastElementChild.getBoundingClientRect();
+
+          indicator.style.top = "auto";
+          indicator.style.bottom = "auto";
+
+          if (comparation === document.DOCUMENT_POSITION_FOLLOWING) {
+            const indicatorFirstHeight =
+              buttonRect.bottom - currentButtonRect.top;
+            indicator.style.top =
+              currentButtonRect.top - containerRect.top + "px";
+
+            indicator
+              .animate(
+                {
+                  height: [
+                    currentButtonRect.height + "px",
+                    indicatorFirstHeight + "px",
+                    buttonRect.height + "px",
+                  ],
+                  top: [
+                    indicatorRect.top - containerRect.top + "px",
+                    indicatorRect.top - containerRect.top + "px",
+                    buttonRect.top - containerRect.top + "px",
+                  ],
+                  easing: [dampedEasing, indicatorEasing],
+                  offset: [0, titleIndicatorOffset, 1],
+                },
+                {
+                  fill: "forwards",
+                  duration: indicatorDuration,
+                }
+              )
+              .finished.then((animation) => {
+                animation.commitStyles();
+                animation.cancel();
+                isAniamting = false;
+              });
+
+            wrapper.animate(
+              {
+                top: ["0px", "10px", "0px"],
+                easing: [dampedEasing, dampedEasing],
+              },
+              {
+                duration: wrapperDuration,
+              }
+            );
+          } else {
+            const indicatorFirstHeight =
+              currentButtonRect.bottom - buttonRect.top;
+            indicator.style.bottom =
+              containerRect.bottom - currentButtonRect.bottom + "px";
+
+            indicator
+              .animate(
+                {
+                  height: [
+                    currentButtonRect.height + "px",
+                    indicatorFirstHeight + "px",
+                    buttonRect.height + "px",
+                  ],
+                  bottom: [
+                    containerRect.bottom - indicatorRect.bottom + "px",
+                    containerRect.bottom - indicatorRect.bottom + "px",
+                    containerRect.bottom - buttonRect.bottom + "px",
+                  ],
+                  easing: [dampedEasing, indicatorEasing],
+                  offset: [0, titleIndicatorOffset, 1],
+                },
+                {
+                  fill: "forwards",
+                  duration: indicatorDuration,
+                }
+              )
+              .finished.then((animation) => {
+                animation.commitStyles();
+                animation.cancel();
+                isAniamting = false;
+              });
+
+            wrapper.animate(
+              {
+                bottom: ["0px", "10px", "0px"],
+                easing: [dampedEasing, dampedEasing],
+              },
+              {
+                duration: wrapperDuration,
+              }
+            );
+          }
+
+          titleIndicator.animate(
+            {
+              top: buttonSpanRect.top - containerRect.top + "px",
+              left: buttonSpanRect.left - containerRect.left + "px",
+              width: buttonSpanRect.width + "px",
+              height: buttonSpanRect.height + "px",
+            },
+            {
+              fill: "forwards",
+              duration: indicatorDuration * titleIndicatorOffset,
+              easing: dampedEasing,
+            }
+          );
+
+          currentButton = button;
+        };
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --spring-easing: linear(
+          0,
+          0.001,
+          0.002 0.4%,
+          0.009,
+          0.021,
+          0.037 1.9%,
+          0.082,
+          0.148,
+          0.215,
+          0.297 5.9%,
+          0.623 9.7%,
+          0.756,
+          0.879,
+          0.978 14.7%,
+          1.02,
+          1.058,
+          1.091,
+          1.119,
+          1.142,
+          1.162,
+          1.177,
+          1.188 21.2%,
+          1.192,
+          1.195,
+          1.196,
+          1.197,
+          1.195,
+          1.193,
+          1.189,
+          1.183 25.7%,
+          1.17 26.8%,
+          1.152,
+          1.131 29.5%,
+          1.055 34%,
+          1.031 35.6%,
+          1.012 37%,
+          0.994,
+          0.98,
+          0.97 42.1%,
+          0.967,
+          0.964 43.9%,
+          0.962,
+          0.961,
+          0.962 47.4%,
+          0.964 48.8%,
+          0.97 51.2%,
+          0.989 57%,
+          0.997 59.9%,
+          1.003,
+          1.007 66.3%,
+          1.008 68.9%,
+          1.007 71.7%,
+          1.001 82.2%,
+          0.999 87.5% 100%
+        );
+        --spring-duration: 1.5s;
+      }
+
+      body {
+        min-height: 100vh;
+        background-color: rgb(238, 231, 231);
+        display: grid;
+        place-items: center;
+      }
+
+      .wrapper {
+        width: 280px;
+        height: 150px;
+        background-color: white;
+        position: relative;
+
+        .overlay {
+          inset: -20px;
+          border-radius: 30px;
+          background-color: black;
+          position: absolute;
+          clip-path: ellipse(28px 28px at calc(100% - 28px) 28px);
+          transition: clip-path cubic-bezier(0.12, 1, 0.4, 1) 750ms,
+            transform var(--spring-duration) var(--spring-easing);
+          transform-origin: calc(100% - 28px) 28px;
+
+          &:active {
+            transform: scale(0.9);
+          }
+        }
+
+        label {
+          padding: 12px;
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+          background-color: transparent;
+          position: absolute;
+          top: 0;
+          right: 0;
+          transition: transform var(--spring-duration) var(--spring-easing),
+            background-color var(--spring-duration) var(--spring-easing);
+
+          input {
+            position: absolute;
+            visibility: hidden;
+            top: 50%;
+            left: 50%;
+          }
+
+          svg {
+            display: block;
+
+            path {
+              animation: close-icon cubic-bezier(0.12, 1, 0.4, 1.01) 750ms
+                forwards;
+            }
+          }
+
+          &:active {
+            background-color: rgba(255, 255, 255, 0.205);
+            transform: scale(0.9);
+          }
+        }
+
+        .overlay:has(#expand:checked) {
+          clip-path: ellipse(350px 350px at calc(100% - 28px) 28px);
+          transition-duration: 1250ms;
+        }
+
+        #expand:checked + svg path {
+          animation: open-icon-first cubic-bezier(0.12, 1, 0.4, 1.01) 500ms
+              forwards,
+            open-icon-last var(--spring-easing) var(--spring-duration) forwards
+              100ms;
+        }
+      }
+
+      @keyframes open-icon-first {
+        to {
+          d: path(
+            "M 26.944 25.066 L 15.948 16.025 L 4.953 8.984 M 4.846 25.052 L 15.923 16.018 L 27 8.985"
+          );
+        }
+      }
+      @keyframes open-icon-last {
+        to {
+          d: path(
+            "M 26.944 27.066 L 15.948 16.025 L 4.953 4.984 M 4.846 27.052 L 15.923 16.018 L 27 4.985"
+          );
+        }
+      }
+
+      @keyframes close-icon {
+        from {
+          d: path(
+            "M 26.944 27.066 L 15.948 16.025 L 4.953 4.984 M 4.846 27.052 L 15.923 16.018 L 27 4.985"
+          );
+        }
+        to {
+          d: path(
+            "M 27 9.984 L 15.948 21.041 L 4.953 10 M 5 9.984 L 15.923 21.034 L 27 10.001"
+          );
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="overlay">
+        <label for="expand">
+          <input type="checkbox" id="expand" />
+          <svg id="Layer_1" width="32" height="32" viewBox="0 0 32 32">
+            <path
+              d="M 27 9.984 L 15.948 21.041 L 4.953 10 M 5 9.984 L 15.923 21.034 L 27 10.001"
+              fill="none"
+              stroke="#FFFFFF"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="5"
+            />
+          </svg>
+        </label>
+      </div>
+    </div>
+  </body>
+</html>

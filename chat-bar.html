@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --easing-out: linear(
+          0,
+          0.001,
+          0.006,
+          0.013,
+          0.022,
+          0.035,
+          0.051 3.8%,
+          0.091,
+          0.131,
+          0.18 7.9%,
+          0.402 13.9%,
+          0.505 16.8%,
+          0.556,
+          0.603,
+          0.646,
+          0.686,
+          0.723,
+          0.757,
+          0.788,
+          0.817,
+          0.843,
+          0.867 32.5%,
+          0.888,
+          0.907 36%,
+          0.925,
+          0.94,
+          0.953,
+          0.965 44.1%,
+          0.975,
+          0.983,
+          0.989 51.5%,
+          0.994 54.4%,
+          0.997 57.1%,
+          1 60%,
+          1.002,
+          1.003 74.4%,
+          1.001
+        );
+        --ease-out-duration: 500ms;
+        --spring-easing: linear(
+          0,
+          0.002,
+          0.008,
+          0.017,
+          0.031,
+          0.048,
+          0.069 3.8%,
+          0.125,
+          0.179,
+          0.248 8%,
+          0.529 13.4%,
+          0.648,
+          0.76 18.3%,
+          0.808,
+          0.851,
+          0.891,
+          0.926,
+          0.958,
+          0.986,
+          1.011,
+          1.032,
+          1.05,
+          1.065 30.5%,
+          1.074,
+          1.081,
+          1.086,
+          1.09,
+          1.093,
+          1.094,
+          1.094,
+          1.092 39.1%,
+          1.087 41.1%,
+          1.079,
+          1.069 45.4%,
+          1.035 52.5%,
+          1.025 54.9%,
+          1.016 57.1%,
+          1.008,
+          1.002 62.2%,
+          0.997,
+          0.994 67.6%,
+          0.991 71.6% 76.3%,
+          0.998 92.6%,
+          1
+        );
+        --spring-duration: 1.833s;
+        --small-spring: linear(
+          0,
+          0.002,
+          0.007,
+          0.015,
+          0.027,
+          0.042,
+          0.061 3.6%,
+          0.11 5%,
+          0.158 6.2%,
+          0.218 7.6%,
+          0.475 13%,
+          0.588,
+          0.695 18.1%,
+          0.742,
+          0.784,
+          0.823,
+          0.858,
+          0.89,
+          0.918,
+          0.943,
+          0.965,
+          0.984,
+          1 31.5%,
+          1.011,
+          1.02,
+          1.027,
+          1.033,
+          1.037,
+          1.041,
+          1.043 40.4% 41.9%,
+          1.042 44.3%,
+          1.038 47%,
+          1.019 56.9%,
+          1.011 61.3%,
+          1.006,
+          1.003 69%,
+          1 74.1%,
+          0.998 80%,
+          0.999
+        );
+      }
+
+      body {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background-color: oklch(53.752% 0.24607 313.359 / 0.2);
+
+        button {
+          padding: 0px;
+          border: none;
+          cursor: pointer;
+          background-color: transparent;
+        }
+
+        svg {
+          display: block;
+        }
+
+        .grid-container {
+          display: grid;
+          padding: 12px;
+          background-color: oklch(53.752% 0.24607 313.359);
+          border-radius: 99px;
+          overflow: hidden;
+          transform-origin: left;
+
+          animation: close-first var(--easing-out) var(--ease-out-duration),
+            close-back 1500ms var(--spring-easing) var(--ease-out-duration);
+          animation-fill-mode: forwards;
+
+          & > * {
+            grid-column: 1 / span 1;
+            grid-row: 1 / span 1;
+            display: grid;
+            grid-template-columns: 64px 1fr;
+            gap: 8px;
+
+            & > div:empty {
+              pointer-events: none;
+            }
+          }
+          #plus-container {
+            label {
+              padding: 12px;
+              background-color: rgba(255, 255, 255, 0.123);
+              border-radius: 50%;
+              position: relative;
+              display: inline-block;
+              cursor: pointer;
+              z-index: 99;
+              transition: transform var(--spring-easing) 1s;
+              input[type="checkbox"] {
+                visibility: hidden;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+              }
+
+              &:hover {
+                transform: scale(1.09);
+              }
+              &:active {
+                transform: scale(0.95);
+              }
+
+              svg {
+                transition: transform var(--spring-easing) 1s;
+              }
+            }
+          }
+
+          #message-container {
+            transform-origin: left;
+            transition: transform var(--small-spring) 1s;
+            input {
+              background-color: rgba(255, 255, 255, 0.1);
+              color: white;
+              border-radius: 99px;
+              border: none;
+              padding: 12px;
+              outline: none;
+              font-family: system-ui, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+                "Helvetica Neue", sans-serif;
+
+              &::placeholder {
+                color: rgba(255, 255, 255, 0.781);
+              }
+            }
+          }
+
+          #media {
+            transform-origin: left;
+            transform: rotate(60deg);
+            transition: transform var(--small-spring) 1s;
+            .media-buttons {
+              display: flex;
+              align-items: center;
+              gap: 16px;
+
+              button {
+                padding: 12px;
+                background-color: rgba(255, 255, 255, 0.123);
+                border-radius: 50%;
+                transition: transform var(--easing-out) 1s;
+
+                &:nth-child(1) {
+                  transform: translateY(100%);
+                  transition-delay: 50ms;
+                }
+                &:nth-child(2) {
+                  transform: translateY(300%);
+                  transition-delay: 100ms;
+                }
+                &:nth-child(3) {
+                  transform: translateY(500%);
+                  transition-delay: 150ms;
+                }
+              }
+            }
+          }
+
+          #plus-container:has(input:checked) ~ #message-container {
+            transform: rotate(-60deg);
+          }
+          #plus-container:has(input:checked) ~ #media {
+            transform: rotate(0deg);
+          }
+          &:has(input:checked) {
+            animation: open-first var(--easing-out) var(--ease-out-duration),
+              open-back 1000ms var(--spring-easing) var(--ease-out-duration);
+
+            #plus-container {
+              label svg {
+                transform: rotate(-225deg);
+              }
+            }
+            #media {
+              .media-buttons {
+                button {
+                  transform: translateY(0%);
+
+                  &:hover {
+                    transform: scale(1.09);
+                    transition-delay: 0ms;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      @keyframes open-first {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(-5deg);
+        }
+      }
+
+      @keyframes open-back {
+        0% {
+          transform: rotate(-5deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+      @keyframes close-first {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(5deg);
+        }
+      }
+
+      @keyframes close-back {
+        0% {
+          transform: rotate(5deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container">
+      <div id="plus-container">
+        <div>
+          <label for="options">
+            <input type="checkbox" id="options" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M6 12h12M12 18V6"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </label>
+        </div>
+      </div>
+      <div id="message-container">
+        <div></div>
+        <input type="text" placeholder="Message" />
+      </div>
+      <div id="media">
+        <div></div>
+        <div class="media-buttons">
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M12.53 20.42H6.21c-3.16 0-4.21-2.1-4.21-4.21V7.79c0-3.16 1.05-4.21 4.21-4.21h6.32c3.16 0 4.21 1.05 4.21 4.21v8.42c0 3.16-1.06 4.21-4.21 4.21Z"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="m19.52 17.1-2.78-1.95V8.84l2.78-1.95c1.36-.95 2.48-.37 2.48 1.3v7.62c0 1.67-1.12 2.25-2.48 1.29ZM11.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M6.76 22h10.48c2.76 0 3.86-1.69 3.99-3.75l.52-8.26A3.753 3.753 0 0 0 18 6c-.61 0-1.17-.35-1.45-.89l-.72-1.45C15.37 2.75 14.17 2 13.15 2h-2.29c-1.03 0-2.23.75-2.69 1.66l-.72 1.45C7.17 5.65 6.61 6 6 6 3.83 6 2.11 7.83 2.25 9.99l.52 8.26C2.89 20.31 4 22 6.76 22ZM10.5 8h3"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M12 18c1.79 0 3.25-1.46 3.25-3.25S13.79 11.5 12 11.5s-3.25 1.46-3.25 3.25S10.21 18 12 18Z"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="m21.68 16.96-3.13-7.31c-1.06-2.48-3.01-2.58-4.32-.22l-1.89 3.41c-.96 1.73-2.75 1.88-3.99.33l-.22-.28c-1.29-1.62-3.11-1.42-4.04.43l-1.72 3.45C1.16 19.17 2.91 22 5.59 22h12.76c2.6 0 4.35-2.65 3.33-5.04ZM6.97 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                stroke="#ffffff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

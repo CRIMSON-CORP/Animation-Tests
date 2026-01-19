@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FLIP Example</title>
+    <style>
+      body {
+        padding: 3rem;
+      }
+      .wrapper {
+        width: 128px;
+        height: 64px;
+        background-color: blueviolet;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+
+      .dot {
+        box-sizing: border-box;
+        background-color: white;
+        height: 48px;
+        aspect-ratio: 1/1;
+        border-radius: 999px;
+      }
+
+      .wrapper.active {
+        justify-content: flex-end;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="dot"></div>
+    </div>
+
+    <script>
+      const wrapper = document.querySelector(".wrapper");
+      const dot = document.querySelector(".dot");
+
+      wrapper.addEventListener("click", () => {
+        // 1. First
+        const first = dot.getBoundingClientRect();
+
+        // Toggle state
+        wrapper.classList.toggle("active");
+
+        // 2. Last
+        const last = dot.getBoundingClientRect();
+
+        // 3. Invert
+        const invertX = first.left - last.left;
+        const invertY = first.top - last.top;
+
+        // 4. Play (ensure layout flush first)
+        requestAnimationFrame(() => {
+          dot.animate(
+            [
+              { transform: `translate(${invertX}px, ${invertY}px)` },
+              { transform: "translate(0, 0)" },
+            ],
+            {
+              duration: 300,
+              easing: "ease-out",
+              fill: "both",
+            }
+          );
+        });
+      });
+    </script>
+  </body>
+</html>
