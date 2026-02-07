@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        user-select: none;
+      }
+
+      :root {
+        --spring-easing: linear(
+          0,
+          0.001,
+          0.002,
+          0.005,
+          0.009,
+          0.014,
+          0.019 1.5%,
+          0.035,
+          0.054,
+          0.078,
+          0.107,
+          0.141 4.4%,
+          0.203,
+          0.281,
+          0.362 7.8%,
+          0.594 11%,
+          0.662,
+          0.723,
+          0.785,
+          0.842,
+          0.893,
+          0.938,
+          0.98,
+          1.017,
+          1.049,
+          1.077 20.4%,
+          1.09,
+          1.101,
+          1.112,
+          1.121,
+          1.13,
+          1.137,
+          1.144,
+          1.149 24.3%,
+          1.155,
+          1.159,
+          1.162,
+          1.163,
+          1.163,
+          1.161,
+          1.158,
+          1.154,
+          1.149,
+          1.143,
+          1.137,
+          1.129 32.8%,
+          1.111 34.4%,
+          1.069 37.9%,
+          1.051,
+          1.032 41.4%,
+          1.024,
+          1.017 43.1%,
+          1.009,
+          1.002,
+          0.996,
+          0.991,
+          0.986,
+          0.982 48.9%,
+          0.979,
+          0.977 51%,
+          0.974 52.4% 55.4%,
+          0.975 57.1%,
+          0.977,
+          0.979 60%,
+          0.991 66.6%,
+          0.997 69.8%,
+          0.999,
+          1.001,
+          1.002,
+          1.003 76.9%,
+          1.004 80.1% 83.8%,
+          1.003 87.2%,
+          1.001 95.7%,
+          1
+        );
+        --ease-out-easing: linear(
+          0,
+          0,
+          0.002 0.7%,
+          0.006,
+          0.014,
+          0.025,
+          0.039,
+          0.056,
+          0.077,
+          0.101 6.1%,
+          0.145,
+          0.2 9.2%,
+          0.435 15.8%,
+          0.539 18.9%,
+          0.591,
+          0.638,
+          0.682,
+          0.721,
+          0.758,
+          0.791,
+          0.821,
+          0.849,
+          0.875,
+          0.898,
+          0.918,
+          0.937,
+          0.953,
+          0.968,
+          0.98,
+          0.991,
+          0.999 47.8%,
+          1.006,
+          1.011 52.4%,
+          1.015 55%,
+          1.016,
+          1.017 59.1% 63.9%,
+          1.015 68.2%,
+          1.008 79.3%,
+          1.005 85.5%,
+          1.003 92.5%,
+          1.001
+        );
+        --spring-duration: 1.333s;
+      }
+
+      body {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background-color: #6004ff10;
+        font-family: Roboto;
+      }
+
+      svg {
+        display: block;
+      }
+
+      .container {
+        position: relative;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .wrapper {
+        width: 100%;
+        /* max-width handled by container */
+        filter: url("#goo");
+        transition: transform var(--ease-out-easing) var(--spring-duration);
+        transition-delay: 300ms;
+      }
+
+      .main-card,
+      .detail-card {
+        background-color: #6004ff;
+        border-radius: 30px;
+        padding: 36px;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        isolation: isolate;
+
+        .blobs {
+          z-index: -1;
+          span {
+            position: absolute;
+            border-radius: 50%;
+            background-color: #6004ff;
+            transition: transform var(--ease-out-easing) 1.5s;
+            transition-delay: 500ms;
+            &:first-child {
+              width: 50px;
+              height: 80px;
+              left: 10%;
+              transition-duration: 1.2s;
+            }
+            &:nth-child(2) {
+              width: 100px;
+              height: 110px;
+              left: 30%;
+              transition-duration: 1.5s;
+            }
+            &:nth-child(3) {
+              width: 50px;
+              height: 100px;
+              left: 70%;
+              transition-duration: 0.8s;
+            }
+          }
+        }
+      }
+
+      .main-card {
+        padding-bottom: 64px;
+        z-index: 1;
+        .img-wrapper {
+          max-width: 80px;
+          background-color: white;
+          border-radius: 24px;
+          padding: 6px 0px;
+          margin-bottom: 24px;
+          img {
+            width: 100%;
+          }
+        }
+        h1 {
+          font-weight: 400;
+          margin-bottom: 8px;
+        }
+        p {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          svg {
+            opacity: 0.6;
+          }
+
+          span {
+            opacity: 0.8;
+          }
+        }
+
+        .blobs span {
+          transform: translateY(50%);
+          bottom: 0;
+        }
+      }
+
+      .detail-card {
+        margin-top: -80px;
+        will-change: margin-top;
+        transition: margin-top var(--spring-duration);
+        transition-timing-function: var(--ease-out-easing);
+        transition-delay: 300ms;
+        transition-duration: 900ms;
+        h2 {
+          font-size: 24px;
+          margin-bottom: 8px;
+          font-weight: 400;
+        }
+
+        p {
+          font-size: 12px;
+          span {
+            opacity: 0.6;
+            &.highlight {
+              opacity: 1;
+            }
+          }
+        }
+
+        & > * {
+          opacity: 0;
+          transition: opacity var(--ease-out-easing) 750ms;
+        }
+
+        .blobs span {
+          transform: translateY(-90%);
+          top: 0;
+        }
+      }
+
+      .container > label {
+        padding: 12px;
+        background-color: white;
+        border-radius: 16px;
+        cursor: pointer;
+        border: none;
+        position: absolute;
+        /* Positioned via JS to match main-card bottom */
+        top: var(--card-height, 300px);
+        left: 50%;
+        transform: translate3d(-50%, 50%, 0);
+        z-index: 10;
+
+        &,
+        svg {
+          transition: transform var(--spring-easing) var(--spring-duration);
+        }
+
+        input {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 10px;
+          height: 10px;
+          visibility: hidden;
+        }
+
+        &:hover {
+          transform: translate3d(-50%, 50%, 0) scale3d(1.05, 1.05, 1);
+        }
+        &:active {
+          transform: translate3d(-50%, 50%, 0) scale3d(0.95, 0.95, 1);
+        }
+      }
+
+      .container:has(#details:checked) {
+        label {
+          svg {
+            transform: rotate3d(0, 0, 1, 180deg);
+          }
+        }
+
+        .wrapper {
+          transform: scale3d(1.2, 1.2, 1);
+          transition-delay: 0ms;
+        }
+
+        .main-card,
+        .detail-card {
+          .blobs span {
+            transform: translateY(0%);
+            transition-delay: 200ms;
+          }
+        }
+
+        .detail-card {
+          transition-delay: 0ms;
+          transition-duration: 1.5s;
+          transition-timing-function: var(--spring-easing);
+          margin-top: 50px;
+          & > * {
+            opacity: 1;
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper">
+        <div class="main-card">
+          <div class="img-wrapper"><img src="/sofa.png" alt="" /></div>
+          <h1>Un sillón</h1>
+          <p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M2 10v4c0 2 1 3 3 3h1.43c.37 0 .74.11 1.06.3l2.92 1.83c2.52 1.58 4.59.43 4.59-2.54V7.41c0-2.98-2.07-4.12-4.59-2.54L7.49 6.7c-.32.19-.69.3-1.06.3H5c-2 0-3 1-3 3Z"
+                stroke="#FFFFFF"
+                stroke-width="1.5"
+              ></path>
+              <path
+                d="M18 8a6.66 6.66 0 0 1 0 8M19.83 5.5a10.83 10.83 0 0 1 0 13"
+                stroke="#FFFFFF"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+            <span>see-yohn</span>
+          </p>
+          <div class="blobs"><span></span><span></span><span></span></div>
+        </div>
+        <div class="detail-card">
+          <h2>An Arm-Chair</h2>
+          <p>
+            <span>Mi papá compró </span><span class="highlight">un sillón</span>
+            <span>y una mesa de centro para la sala.</span>
+          </p>
+          <div class="blobs"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <label for="details">
+        <input type="checkbox" id="details" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            stroke="#000000"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-miterlimit="10"
+            stroke-width="1.5"
+            d="M19.92 8.95l-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
+          ></path>
+        </svg>
+      </label>
+    </div>
+    <script>
+      const mainCard = document.querySelector(".main-card");
+      const container = document.querySelector(".container");
+
+      const updatePosition = () => {
+        if (mainCard && container) {
+          container.style.setProperty(
+            "--card-height",
+            `${mainCard.offsetHeight - 50}px`,
+          );
+        }
+      };
+
+      const observer = new ResizeObserver(updatePosition);
+      observer.observe(mainCard);
+      // Initial call
+      updatePosition();
+    </script>
+    <!-- Gooey Filter -->
+    <svg
+      style="visibility: hidden; position: absolute"
+      width="0"
+      height="0"
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+    >
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+          <feColorMatrix
+            in="blur"
+            mode="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10"
+            result="goo"
+          />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+        </filter>
+      </defs>
+    </svg>
+  </body>
+</html>
