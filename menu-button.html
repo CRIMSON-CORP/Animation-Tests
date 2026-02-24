@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      *,
+      html,
+      body {
+        margin: 0px;
+      }
+      :root {
+        --easing: cubic-bezier(0.17, 0.03, 0, 0.99);
+        --spring-easing: linear(
+          0,
+          0.001,
+          0.002 0.5%,
+          0.009,
+          0.019,
+          0.035,
+          0.054,
+          0.078 3.2%,
+          0.141,
+          0.203,
+          0.281 6.7%,
+          0.594 11%,
+          0.723,
+          0.842 14.9%,
+          0.893,
+          0.938,
+          0.98,
+          1.017,
+          1.049,
+          1.077,
+          1.101,
+          1.121,
+          1.137,
+          1.149 24.3%,
+          1.155,
+          1.159,
+          1.162,
+          1.163,
+          1.163,
+          1.161,
+          1.158,
+          1.154 29.9%,
+          1.143,
+          1.129,
+          1.111 34.4%,
+          1.051 39.6%,
+          1.032,
+          1.017 43.1%,
+          1.002,
+          0.991,
+          0.982 48.9%,
+          0.979,
+          0.977 51%,
+          0.974 52.4% 55.4%,
+          0.975 57.1%,
+          0.979 60%,
+          0.991 66.6%,
+          0.997 69.8%,
+          1.001,
+          1.003 76.9%,
+          1.004 80.1% 83.8%,
+          1
+        );
+        --spring-duration: 1s;
+        --duration: 0.5s;
+      }
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          Oxygen,
+          Ubuntu,
+          Cantarell,
+          "Open Sans",
+          "Helvetica Neue",
+          sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: bisque;
+      }
+      .overlay {
+        position: absolute;
+        inset: 0;
+        mix-blend-mode: difference;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        background-color: bisque;
+        transition: clip-path var(--easing) var(--duration);
+      }
+      label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        position: relative;
+
+        span.text {
+          display: block;
+          transform: translateX(16px);
+          transition:
+            transform var(--easing) var(--duration),
+            opacity var(--easing) var(--duration);
+        }
+
+        input[type="checkbox"] {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          visibility: hidden;
+          pointer-events: none;
+          opacity: 0;
+          transform: translate(-50%, -50%);
+        }
+
+        span.menu-icon {
+          padding: 8px;
+          border-radius: 999px;
+          display: block;
+          transform: scale(0.2);
+          background-color: bisque;
+          mix-blend-mode: difference;
+          transition: transform var(--spring-easing) var(--spring-duration);
+          svg {
+            overflow: visible;
+            display: block;
+            opacity: 0;
+            transition: opacity var(--spring-easing) var(--spring-duration);
+            path {
+              transition:
+                var(--duration) stroke-dasharray var(--easing),
+                var(--duration) stroke-dashoffset var(--easing);
+
+              &:first-child {
+                stroke-dasharray: 21.899999868652344 35.113878;
+                stroke-dashoffset: 0;
+              }
+              &:last-child {
+                stroke-dasharray: 21.96227188110352 41.8;
+                stroke-dashoffset: -41.8;
+                transition-delay: 70ms;
+              }
+            }
+          }
+        }
+      }
+      label:hover {
+        span.text {
+          transform: translateX(0);
+        }
+        span.menu-icon {
+          transform: scale(1);
+          svg {
+            opacity: 1;
+          }
+        }
+      }
+
+      body:has(input[type="checkbox"]:checked) {
+        .overlay {
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+      }
+
+      label:has(input[type="checkbox"]:checked) {
+        span.text {
+          transform: translateX(16px);
+          opacity: 0;
+        }
+        span.menu-icon {
+          transform: scale(1);
+          svg {
+            opacity: 1;
+            path {
+              transition:
+                var(--duration) stroke-dasharray var(--easing),
+                var(--duration) stroke-dashoffset var(--easing);
+              &:first-child {
+                stroke-dasharray: 23 34.013877868652344;
+                stroke-dashoffset: -34.013877868652344;
+                transition-delay: 70ms;
+              }
+              &:last-child {
+                stroke-dasharray: 21.999999881103513 41.762272;
+                stroke-dashoffset: 0;
+              }
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay"></div>
+    <label for="menu">
+      <input type="checkbox" name="menu" id="menu" />
+      <span class="text">Menu</span>
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 32 32"
+          width="32"
+          height="32"
+          xmlns:bx="https://boxy-svg.com"
+        >
+          <path
+            style="
+              fill: none;
+              stroke: rgb(0, 0, 0);
+              stroke-width: 3px;
+              fill-opacity: 0.09;
+              stroke-miterlimit: 5.03;
+              stroke-linejoin: round;
+            "
+            d="M 26.977 12.016 L 5 12 C 5 12 1 10 3 7 C 5 4 7 7 8.236 8 L 24 23.784"
+          ></path>
+          <path
+            style="
+              fill: none;
+              stroke: rgb(0, 0, 0);
+              stroke-width: 3px;
+              fill-opacity: 0.09;
+              stroke-miterlimit: 5.03;
+              stroke-linejoin: round;
+            "
+            d="M 8.236 23.784 L 24 8.248 C 30.107 6.137 31.151 8.401 31 13 C 30.849 17.599 26.977 20 26.977 20 L 5 19.984"
+          ></path>
+        </svg>
+      </span>
+    </label>
+  </body>
+</html>
