@@ -57,3 +57,11 @@ A simple test that animates the justify-content property of a flex container to 
 An animated toggle switch with smooth spring physics and morphing SVG animations.
 
 It uses a custom spring easing function defined with CSS `linear()` for realistic bouncy transitions, CSS `d` path morphing to transform a circle into a vertical line when toggled, and dynamic background color transitions. The switch features a pill-shaped container with a sliding indicator that translates 100% on toggle, complete with scale-down effect on active press and smooth shadow transitions that match the current state color.
+
+### Menu Button
+
+A user interface that animates the opening of a menu button with a dynamic full-screen overlay.
+
+It uses Grid layout for element positioning, transforms for animation, cubic-bezier, linear easing functions for smooth and bouncy transitions.
+
+SVG morphing is also used to morph the menu icon from hamburger to Close icon
